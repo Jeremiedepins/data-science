@@ -13,3 +13,9 @@ how to run the code :
    setwd("path/to/data-science")
 4. Run the script:
    source("scripts/LB.R")
+
+## what if it does not work ?
+1. download the xlsx file and get the path, ex : "C:\Users\moi\Documents\test_python"
+2. Open RStudio.
+3. copy paste the R code in R-studio for it to work
+4. replace the path to the path where you put the xlsx doc and In put : data <- read_excel(" C:\Users\jerem\Documents\test_python\lending_borrowing_data ")
