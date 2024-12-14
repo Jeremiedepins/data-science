@@ -25,10 +25,13 @@ library(lmtest)
 library(tseries)
 library(here)
 library(readr)
+library(lubridate)
 
 
-## data parametrage ________________________________________________________
-# load data from github__#1 
+
+#github link to file => "https://github.com/Jeremiedepins/data-science/tree/main"
+# data parametrage ________________________________________________________
+
 # Define GitHub URLs
 base_url <- "https://raw.githubusercontent.com/Jeremiedepins/data-science/main/lending_borrowing_data_csv.csv"
 
@@ -42,18 +45,33 @@ data <- read.csv(temp_data)
 # Display the first few rows of the data
 head(data)
 
-
-#in case the #1 does not work delete the "#" in front of the code" :
-# Load Data when the file are in a folder called "project_data_LB" in your local computer__#2
-
-#data <- read.csv(here("project_data_LB", "thesis-lending_borrowing_data_csv.csv"))
-#head(data)
-
-
-##The code start here ____________________________________________
 # Create log-transformed variables
 # Compute log-transformed variables and log return of TVL
+# Clean the data
 datanew <- data %>%
+  select(-X, -X.1) %>%  # Remove unnecessary columns
+  mutate(
+    # Convert Date to Date type
+    Date = mdy(Date),
+    
+    # Log transformation
+    log_fees = log(Fees + 1),
+    log_tokinc = log(token_incentives + 1), 
+    log_coredev = log(core_dev + 1), 
+    log_treasury = log(treasury + 1),
+    log_tvl = log(TVL + 1),
+    
+    # Compute relative returns of TVL (log_return_tvl)
+    log_return_tvl = (log_tvl - lag(log_tvl)) / lag(log_tvl)  # Relative return of TVL
+  ) %>%
+  arrange(Name, Date) %>%  
+  group_by(Name) %>%       
+  ungroup()  
+
+# Check the first few rows of the modified data
+#here I redo this step because it do not want to run it without it 
+head(datanew)
+datanew <- datanew %>%
   arrange(Name, Date) %>%
   group_by(Name) %>%
   mutate(
@@ -142,9 +160,7 @@ print(adf_test_Fees)
 print(adf_test_core_dev)
 
 
-#correct stationarity 
-# Create differenced variables by grouping with dplyr
-data_pd <- na.omit(data_pd) #optional in case of error by processing the code
+#
 data_pd <- data_pd %>%
   group_by(Name) %>%
   mutate(
@@ -157,30 +173,25 @@ data_pd <- data_pd %>%
   ) %>%
   ungroup()
 
-# Remove any NAs from the differenced series
-diff_log_treasury <- na.omit(diff_log_treasury)
-diff_log_return_tvl <- na.omit(diff_log_return_tvl)
-diff_log_tvl <- na.omit(diff_log_tvl)
-diff_log_coredev <- na.omit(diff_log_coredev)
-diff_log_tokinc <- na.omit(diff_log_tokinc)
-diff_log_fees <- na.omit(diff_log_fees)
-
+# dropping NA value otherwise the code do not work
+data_pd_clean <- data_pd %>%
+  drop_na(diff_log_return_tvl, diff_log_tvl, diff_log_fees, diff_log_tokinc, diff_log_coredev, diff_log_treasury)
 
 #Run the ADF test again to recheck if stationarity is corrected on all independent and dependent variables
-adf_test_diff_treasury <- adf.test(diff_log_treasury, alternative = "stationary")
-adf_test_diff_return_tvl <- adf.test(diff_log_return_tvl, alternative = "stationary")
-adf_test_diff_tvl <- adf.test(diff_log_tvl, alternative = "stationary")
-adf_test_diff_coredev <- adf.test(diff_log_coredev, alternative = "stationary")
-adf_test_diff_fees <- adf.test(diff_log_fees, alternative = "stationary")
-adf_test_diff_tokinc <- adf.test(diff_log_tokinc, alternative = "stationary")
+adf_test_diff_treasury <- adf.test(data_pd$diff_log_treasury, alternative = "stationary")
+adf_test_diff_return_tvl <- adf.test(data_pd$diff_log_return_tvl, alternative = "stationary")
+adf_test_diff_tvl <- adf.test(data_pd$diff_log_tvl, alternative = "stationary")
+adf_test_diff_coredev <- adf.test(data_pd$diff_log_coredev, alternative = "stationary")
+adf_test_diff_fees <- adf.test(data_pd$diff_log_fees, alternative = "stationary")
+adf_test_diff_tokinc <- adf.test(data_pd$diff_log_tokinc, alternative = "stationary")
 
-#display results
-print(adf_test_diff_return_tvl)
-print(adf_test_diff_tvl)
-print(adf_test_diff_treasury)
-print(adf_test_diff_fees)
-print(adf_test_diff_tokinc)
-print(adf_test_diff_coredev)
+# Print results of the ADF tests
+adf_test_diff_treasury
+adf_test_diff_return_tvl
+adf_test_diff_tvl
+adf_test_diff_coredev
+adf_test_diff_fees
+adf_test_diff_tokinc
 
 # Here we are choosing the best model which fit the best our data
 # Panel Data Models (OLS, FE, RE)
