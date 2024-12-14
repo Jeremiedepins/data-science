@@ -6,7 +6,7 @@ how to run the code :
 - `data-science/lending_borrowing_data_csv.csv`: Input data file.
 - `data-science/lending_borrowing_data.xlsx`: Input data file if csv does not work.
 
-## I provided 3 way to run the code; once you find an alternative wich works delete the others
+## I provided 4 way to run the code; once you find an alternative wich works delete the others
 
 ## How to Run #1 way
 1. For the first way you just need to download the file in a folder called "project_data_LB"
@@ -15,7 +15,6 @@ how to run the code :
 ## How to Run #2 way throught github
 1. For the second way way you just need to download the LB.R script
 2. open R-studio and run the code
-
 
 ## How to Run #3 way throught local computer
 1. download the xlsx or CSV file and get the path,
