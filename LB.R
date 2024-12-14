@@ -24,7 +24,7 @@ library(tseries)
 
 # data parametrage ________________________________________________________
 # Load Data
-data <- read_excel("data-science/lending_borrowing_data.xlsx")
+data <- read_excel(here("data", "thesis-lending_borrowing_data_csv.csv"))
 head(data)
 
 # Create log-transformed variables
