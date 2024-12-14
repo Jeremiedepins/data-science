@@ -1,4 +1,6 @@
 install.packages("readxl")
+install.packages("readr")
+install.packages("data.table") 
 install.packages("tidyverse")
 install.packages("plm")
 install.packages("gplots")
@@ -10,6 +12,7 @@ install.packages("dplyr")
 install.packages("nlme")
 install.packages("lmtest")
 
+
 library(readxl)
 library(plm)
 library(tidyverse)
@@ -20,13 +23,33 @@ library(dplyr)
 library(nlme)
 library(lmtest)
 library(tseries)
+library(here)
 
 
-# data parametrage ________________________________________________________
-# Load Data
-data <- read_excel(here("data", "thesis-lending_borrowing_data_csv.csv"))
+# data parametrage (3 ways) ________________________________________________________
+
+# Load Data when the file are in a folder called "data" in your local computer__#1
+data <- read.csv(here("data", "thesis-lending_borrowing_data_csv.csv"))
 head(data)
 
+# load data from github__#2 
+# Define GitHub URLs
+base_url <- "https://github.com/Jeremiedepins/data-science/blob/main/lending_borrowing_data_csv.csv"
+data_url <- paste0(base_url, "lending_borrowing_data_csv.csv")
+
+# Download the data file to a temporary directory
+temp_data <- tempfile(fileext = ".csv")
+download.file(data_url, destfile = temp_data)
+
+data <- read.csv(temp_data)
+head(data)
+
+#load data in local with xlxs file__#3
+data <- read_excel("your path\\thesis-lending_borrowing_data.xlsx")
+head(data)
+
+
+#The code start here ____________________________________________
 # Create log-transformed variables
 # Compute log-transformed variables and log return of TVL
 datanew <- data %>%
