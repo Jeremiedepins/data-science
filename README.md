@@ -15,7 +15,7 @@ how to run the code :
    source("scripts/LB.R")
 
 ## what if it does not work ?
-1. download the xlsx file and get the path, ex : "C:\Users\moi\Documents\test_python"
+1. download the xlsx or CSV file and get the path, ex : "C:\Users\moi\Documents\test_python"
 2. Open RStudio.
 3. copy paste the R code in R-studio for it to work
 4. replace the path to the path where you put the xlsx doc and In put : data <- read_excel(" C:\Users\moi\Documents\test_python\lending_borrowing_data ")
