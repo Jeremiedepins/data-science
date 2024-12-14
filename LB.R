@@ -24,12 +24,14 @@ library(nlme)
 library(lmtest)
 library(tseries)
 library(here)
+library(readr)
 
 
-# data parametrage (3 ways) ________________________________________________________
+## data parametrage (2 ways) ________________________________________________________
+# I provided 3 way to run the code; once you find an alternative wich works delete the others
 
-# Load Data when the file are in a folder called "data" in your local computer__#1
-data <- read.csv(here("data", "thesis-lending_borrowing_data_csv.csv"))
+# Load Data when the file are in a folder called "project_data_LB" in your local computer__#1
+data <- read.csv(here("project_data_LB", "thesis-lending_borrowing_data_csv.csv"))
 head(data)
 
 # load data from github__#2 
@@ -44,12 +46,8 @@ download.file(data_url, destfile = temp_data)
 data <- read.csv(temp_data)
 head(data)
 
-#load data in local with xlxs file__#3
-data <- read_excel("your path\\thesis-lending_borrowing_data.xlsx")
-head(data)
 
-
-#The code start here ____________________________________________
+##The code start here ____________________________________________
 # Create log-transformed variables
 # Compute log-transformed variables and log return of TVL
 datanew <- data %>%
