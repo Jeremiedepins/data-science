@@ -271,20 +271,24 @@ results <- data.frame(
 # Monte Carlo simulation loop
 set.seed(123) 
 for (i in 1:n_sim) {
-  
+
+    # here, we are Generating random samples for independent variables based on their observed mean and standard deviation
+
   diff_log_fees <- rnorm(n, mean = mean_fees, sd = sd_fees)
   diff_log_tokinc <- rnorm(n, mean = mean_tokinc, sd = sd_tokinc)
   diff_log_coredev <- rnorm(n, mean = mean_coredev, sd = sd_coredev)
   diff_log_treasury <- rnorm(n, mean = mean_treasury, sd = sd_treasury)
   
   
-  # Simulate dependent variable (log return)
+  # Simulate the dependent variable "log return" using the true regression coefficients 
+  # and adding random noise to simulate realistic variability
+  
   log_return <- true_intercept +
     true_fees * diff_log_fees +
     true_tokinc * diff_log_tokinc +
     true_coredev * diff_log_coredev +
     true_treasury * diff_log_treasury +
-    rnorm(n, mean = 0, sd = 0.001)  
+    rnorm(n, mean = 0, sd = 0.001)   # random noise is computed here
   
   # Fit the random effects model
   model <- lm(log_return ~ diff_log_fees + diff_log_tokinc + diff_log_coredev + diff_log_treasury)
