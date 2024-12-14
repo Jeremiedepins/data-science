@@ -15,7 +15,7 @@ how to run the code :
 2. open R-studio and run the code
 
 copy past the following code in the r-script:
-
+"
 # load data from github__#2 
 # Define GitHub URLs
 base_url <- "https://github.com/Jeremiedepins/data-science/blob/main/lending_borrowing_data_csv.csv"
@@ -27,7 +27,7 @@ download.file(data_url, destfile = temp_data)
 
 data <- read.csv(temp_data)
 head(data)
-
+"
 
 ## How to Run #3 way throught local computer
 1. download the xlsx or CSV file and get the path, ex : "C:\Users\moi\Documents\test_python" (try with csv first and if it does not work try with xlsx file)
