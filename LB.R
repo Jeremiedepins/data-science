@@ -27,24 +27,27 @@ library(here)
 library(readr)
 
 
-## data parametrage (2 ways) ________________________________________________________
-# I provided 3 way to run the code; once you find an alternative wich works delete the others
-
-# Load Data when the file are in a folder called "project_data_LB" in your local computer__#1
-data <- read.csv(here("project_data_LB", "thesis-lending_borrowing_data_csv.csv"))
-head(data)
-
-# load data from github__#2 
+## data parametrage ________________________________________________________
+# load data from github__#1 
 # Define GitHub URLs
-base_url <- "https://github.com/Jeremiedepins/data-science/blob/main/lending_borrowing_data_csv.csv"
-data_url <- paste0(base_url, "lending_borrowing_data_csv.csv")
+base_url <- "https://raw.githubusercontent.com/Jeremiedepins/data-science/main/lending_borrowing_data_csv.csv"
 
 # Download the data file to a temporary directory
 temp_data <- tempfile(fileext = ".csv")
-download.file(data_url, destfile = temp_data)
+download.file(base_url, destfile = temp_data)  # Use base_url directly here
 
+# Read the CSV data into R
 data <- read.csv(temp_data)
+
+# Display the first few rows of the data
 head(data)
+
+
+#in case the #1 does not work delete the "#" in front of the code" :
+# Load Data when the file are in a folder called "project_data_LB" in your local computer__#2
+
+#data <- read.csv(here("project_data_LB", "thesis-lending_borrowing_data_csv.csv"))
+#head(data)
 
 
 ##The code start here ____________________________________________
